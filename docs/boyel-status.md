@@ -37,7 +37,7 @@ Claude Code나 새 대화에서 이 문서를 먼저 읽고 이어서 작업한�
   - [ ] 저장소에 자동 게시 파일 올리기 (Claude GitHub 앱 설치 필요 — 쓰기 권한)
   - [ ] 페이스북 페이지 생성 — "최근에 너무 많이 시도" 제한 걸림, 24시간 후 1회 재시도 예정
   - [ ] Meta 개발자 앱, 토큰(setup_token.py), Secrets 등록
-  - [ ] 피드 이미지 JPG 내보내서 images/ 에 업로드 (01_logo, 02_slogan, 03_intro)
+  - [x] 첫 피드 3장 게시 완료 (2026-10-01, 크롬으로 수동 게시. posts.json에 posted 처리)
 - 03-intro 캡션은 Our Promise 버전으로 교체 완료
 
 ## 도매/운영 메모
