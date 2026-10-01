@@ -16,7 +16,7 @@ import json
 import os
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import requests
 
@@ -83,9 +83,22 @@ def main():
         posts = json.load(f)
 
     now = datetime.now(timezone.utc)
-    due = [p for p in posts
-           if not p.get("posted") and datetime.fromisoformat(p["publish_at"]) <= now]
+    kst = timezone(timedelta(hours=9))
+    now_kst = now.astimezone(kst)
+
+    def is_due(p):
+        at = datetime.fromisoformat(p["publish_at"]).astimezone(kst)
+        # 예약 시각이 지났고, 밀린 게시물도 '오늘의 같은 시각'(예: 저녁 9시)이 된 뒤에만 올린다
+        return at <= now and now_kst.time() >= at.time()
+
+    due = [p for p in posts if not p.get("posted") and is_due(p)]
     due.sort(key=lambda p: p["publish_at"])  # 예약 시간 순서대로 (그리드 순서가 이걸로 정해져요)
+
+    # 하루 최대 게시 수 (기본 1개). 토큰 연결이 늦어져 밀려도 한꺼번에 쏟아지지 않게 하루 하나씩만 올린다
+    max_per_day = int(os.environ.get("MAX_POSTS_PER_DAY", "1"))
+    posted_today = sum(1 for p in posts if p.get("posted") and p.get("posted_at")
+                       and datetime.fromisoformat(p["posted_at"]).astimezone(kst).date() == now_kst.date())
+    due = due[:max(0, max_per_day - posted_today)]
 
     if not due:
         print("지금 올릴 게시물이 없어요.")

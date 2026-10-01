@@ -33,5 +33,10 @@ GitHub Actions 가 매시간 `post_instagram.py` 를 실행해, `posts.json` 에
 - 토큰과 ID는 GitHub Secrets(`IG_USER_ID`, `IG_ACCESS_TOKEN`)에만 둔다. 파일에 절대 쓰지 않는다.
 - 이 저장소는 이미지 주소를 위해 공개(public)이므로, 개인 정보나 아이 얼굴 원본 사진 등은 올리기 전에 사용자에게 확인한다.
 
+## 게시 규칙 (자동)
+- 하루 최대 1개(`MAX_POSTS_PER_DAY`, 기본 1). 밀린 게시물도 다음 날 같은 시각(저녁 9시)에 하나씩만 올라간다.
+- 기본 게시 시각: 저녁 9시(KST). 새 게시물은 마지막 예약 다음 날 21:00 으로 잡는다.
+- 이미지는 4:5(1080x1350) JPG로 맞춘다. 3:4처럼 세로가 더 긴 사진은 위아래를 잘라 4:5로 만든다.
+
 ## 테스트
 `DRY_RUN=1 IMAGE_BASE_URL=https://example.com python post_instagram.py` → 실제로 올리지 않고 대상만 출력
